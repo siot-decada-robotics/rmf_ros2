@@ -306,6 +306,20 @@ PYBIND11_MODULE(rmf_adapter, m) {
         );
     },
     py::arg("consider"))
+  .def("consider_bookshelf_requests",
+     [&](agv::FleetUpdateHandle& self,
+         ModifiedConsiderRequest consider)
+    {
+      self.consider_bookshelf_requests(
+          [consider = std::move(consider)](
+            const nlohmann::json &description, Confirmation &confirm)
+          {
+            nlohmann::json desc = description;
+            confirm = consider(desc); // confirm is returned by user
+          }
+        );
+    },
+    py::arg("consider"))
   .def("consider_patrol_requests",
      [&](agv::FleetUpdateHandle& self,
          ModifiedConsiderRequest consider)

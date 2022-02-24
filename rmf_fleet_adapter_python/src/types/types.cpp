@@ -40,6 +40,7 @@ using TaskType = rmf_task_msgs::msg::TaskType;
 using Loop = rmf_task_msgs::msg::Loop;
 using Delivery = rmf_task_msgs::msg::Delivery;
 using Clean = rmf_task_msgs::msg::Clean;
+using Bookshelf = rmf_task_msgs::msg::Bookshelf;
 using TaskDescription = rmf_task_msgs::msg::TaskDescription;
 using TaskProfile = rmf_task_msgs::msg::TaskProfile;
 
@@ -79,6 +80,12 @@ Clean make_clean_msg(std::string start_waypoint)
   return request;
 }
 
+Bookshelf make_bookshelf_msg(std::string start_waypoint)
+{
+  Bookshelf request;
+  request.start_waypoint = start_waypoint;
+  return request;
+}
 //==============================================================================
 void bind_types(py::module& m)
 {
@@ -172,6 +179,17 @@ void bind_types(py::module& m)
       self.start_waypoint = start_waypoint;
     });
 
+  py::class_<Bookshelf>(m_type, "CPPBookshelfMsg")
+  .def(py::init(&make_bookshelf_msg),
+    py::arg("start_waypoint") = "")
+  .def_property(
+    "start_waypoint",
+    [&](Bookshelf& self) { return self.start_waypoint; },
+    [&](Bookshelf& self,
+    std::string start_waypoint)
+    {
+      self.start_waypoint = start_waypoint;
+    });
   py::class_<TaskDescription>(m_type, "CPPTaskDescriptionMsg")
   .def(py::init<>())
   .def_property(
@@ -182,7 +200,7 @@ void bind_types(py::module& m)
       self.task_type.type = TaskType::TYPE_DELIVERY;
       self.delivery = delivery;
     },
-    "Delivery Task, this will ovewrite the previous type")
+    "Delivery Task, this will overwrite the previous type")
   .def_property(
     "loop",
     [&](TaskDescription& self) { return self.loop; },
@@ -191,7 +209,7 @@ void bind_types(py::module& m)
       self.task_type.type = TaskType::TYPE_LOOP;
       self.loop = loop;
     },
-    "Loop Task, this will ovewrite the previous type")
+    "Loop Task, this will overwrite the previous type")
   .def_property(
     "clean",
     [&](TaskDescription& self) { return self.clean; },
@@ -200,7 +218,16 @@ void bind_types(py::module& m)
       self.task_type.type = TaskType::TYPE_CLEAN;
       self.clean = clean;
     },
-    "Clean Task, this will ovewrite the previous type")
+    "Clean Task, this will overwrite the previous type")
+  .def_property(
+    "bookshelf",
+    [&](TaskDescription& self) { return self.bookshelf; },
+    [&](TaskDescription& self, Bookshelf bookshelf)
+    {
+      self.task_type.type = TaskType::TYPE_BOOKSHELF;
+      self.bookshelf = bookshelf;
+    },
+    "Bookshelf Task, this will overwrite the previous type")
   .def_property(
     "start_time_sec",
     [&](TaskDescription& self) { return self.start_time.sec; },

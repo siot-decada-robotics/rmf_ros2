@@ -174,7 +174,8 @@ public:
   {
     {1, "patrol"},
     {2, "delivery"},
-    {4, "clean"}
+    {4, "clean"},
+    {6, "bookshelf"}
   };
 
   using LegacyConversion =
@@ -373,6 +374,17 @@ public:
         const auto& clean = task_description.clean;
         nlohmann::json description;
         description["zone"] = clean.start_waypoint;
+
+        return description;
+      };
+
+    // Bookshelf
+    legacy_task_types["bookshelf"] =
+      [](const TaskDescription& task_description) -> nlohmann::json
+      {
+        const auto& bookshelf = task_description.bookshelf;
+        nlohmann::json description;
+        description["book_zone"] = bookshelf.start_waypoint;
 
         return description;
       };

@@ -157,6 +157,20 @@ public:
   ///   The FleetUpdateHandle will ensure that the request is feasible for the
   ///   robots before triggering this callback.
   FleetUpdateHandle& consider_cleaning_requests(ConsiderRequest consider);
+  
+  /// Allow this fleet adapter to consider bookshelf scanning requests.
+  ///
+  /// Pass in a nullptr to disable bookshelf requests.
+  ///
+  /// By default, bookshelf requests are not accepted until you provide this
+  /// callback.
+  ///
+  /// \param[in] consider
+  ///   Decide whether to accept a bookshelf request. The description will
+  ///   satisfy the event_description_Clean.json schema of rmf_fleet_adapter.
+  ///   The FleetUpdateHandle will ensure that the request is feasible for the
+  ///   robots before triggering this callback.
+  FleetUpdateHandle& consider_bookshelf_requests(ConsiderRequest consider);
 
   /// Allow this fleet adapter to consider patrol requests.
   ///

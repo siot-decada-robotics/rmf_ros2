@@ -26,6 +26,7 @@
   <arg name="perform_loop" default="false" description="Whether this fleet adapter can perform loops"/>
   <arg name="perform_deliveries" default="false" description="Whether this fleet adapter can perform deliveries"/>
   <arg name="perform_cleaning" default="false" description="Whether this fleet adapter can perform cleaning"/>
+  <arg name="perform_bookshelf" default="false" description="Whether this fleet adapter can perform bookshelf"/>
   <arg name="finishing_request" default="nothing" description="What should happen when the robot is finished with its tasks? Options: nothing (default), park, charge"/>
   <arg name="battery_voltage" description="The nominal voltage(V) of the battery in the vehicles in this fleet"/>
   <arg name="battery_capacity" description="The nominal capacity(Ah) of the battery in the vehicles in this fleet"/>
@@ -64,6 +65,7 @@
     <param name="perform_deliveries" value="$(var perform_deliveries)"/>
     <param name="perform_loop" value="$(var perform_loop)"/>
     <param name="perform_cleaning" value="$(var perform_cleaning)"/>
+    <param name="perform_bookshelf" value="$(var perform_bookshelf)"/>
     <param name="finishing_request" value="$(var finishing_request)"/>
 
     <param name="delay_threshold" value="$(var delay_threshold)"/>

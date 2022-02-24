@@ -28,6 +28,7 @@
 #include <rmf_task/TaskPlanner.hpp>
 #include <rmf_task/Request.hpp>
 #include <rmf_task/requests/Clean.hpp>
+#include <rmf_task/requests/Bookshelf.hpp>
 #include <rmf_task/BinaryPriorityScheme.hpp>
 
 #include <rmf_task_sequence/Task.hpp>
@@ -134,6 +135,7 @@ struct TaskDeserialization
   std::shared_ptr<FleetUpdateHandle::ConsiderRequest> consider_pickup;
   std::shared_ptr<FleetUpdateHandle::ConsiderRequest> consider_dropoff;
   std::shared_ptr<FleetUpdateHandle::ConsiderRequest> consider_clean;
+  std::shared_ptr<FleetUpdateHandle::ConsiderRequest> consider_bookshelf;
   std::shared_ptr<FleetUpdateHandle::ConsiderRequest> consider_patrol;
   std::shared_ptr<FleetUpdateHandle::ConsiderRequest> consider_composed;
   // Map category string to its ConsiderRequest for PerformAction events

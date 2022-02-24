@@ -1133,6 +1133,11 @@ std::shared_ptr<Connections> make_fleet(
     task_types.insert(rmf_task_msgs::msg::TaskType::TYPE_CLEAN);
   }
 
+  if (node->declare_parameter<bool>("perform_bookshelf", false))
+  {
+    task_types.insert(rmf_task_msgs::msg::TaskType::TYPE_BOOKSHELF);
+  }
+  
   connections->fleet->accept_task_requests(
     [task_types](const rmf_task_msgs::msg::TaskProfile& msg)
     {

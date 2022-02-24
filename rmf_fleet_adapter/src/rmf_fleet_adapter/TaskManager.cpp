@@ -19,6 +19,7 @@
 
 #include <rmf_task/requests/ChargeBattery.hpp>
 #include <rmf_task/requests/Clean.hpp>
+#include <rmf_task/requests/Bookshelf.hpp>
 #include <rmf_task/requests/Delivery.hpp>
 #include <rmf_task/requests/Loop.hpp>
 
@@ -28,6 +29,7 @@
 
 #include "agv/internal_FleetUpdateHandle.hpp"
 #include "tasks/Clean.hpp"
+#include "tasks/Bookshelf.hpp"
 #include "tasks/ChargeBattery.hpp"
 #include "tasks/Delivery.hpp"
 #include "tasks/Loop.hpp"

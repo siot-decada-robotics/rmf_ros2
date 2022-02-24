@@ -28,6 +28,7 @@
 #include "../tasks/Delivery.hpp"
 #include "../tasks/Loop.hpp"
 #include "../tasks/Clean.hpp"
+#include "../tasks/Bookshelf.hpp"
 #include "../tasks/ChargeBattery.hpp"
 #include "../tasks/Compose.hpp"
 #include "../events/GoToPlace.hpp"
@@ -36,6 +37,7 @@
 #include <rmf_task/Constraints.hpp>
 #include <rmf_task/Parameters.hpp>
 #include <rmf_task/requests/Clean.hpp>
+#include <rmf_task/requests/Bookshelf.hpp>
 #include <rmf_task/requests/Delivery.hpp>
 #include <rmf_task/requests/Loop.hpp>
 
@@ -276,7 +278,7 @@ void FleetUpdateHandle::Implementation::bid_notice_cb(
     RCLCPP_INFO(
       node->get_logger(),
       "Fleet [%s] does not have any robots to accept task [%s]. Use "
-      "FleetUpdateHadndle::add_robot(~) to add robots to this fleet. ",
+      "FleetUpdateHandle::add_robot(~) to add robots to this fleet. ",
       name.c_str(), task_id.c_str());
     return;
   }
@@ -980,6 +982,13 @@ void FleetUpdateHandle::Implementation::add_standard_tasks()
     activation,
     node->clock());
 
+  tasks::add_bookshelf(
+    dock_param_map,
+    (*planner)->get_configuration().vehicle_traits(),
+    deserialization,
+    activation,
+    node->clock());
+
   tasks::add_charge_battery(
     *activation.task,
     activation.phase,
@@ -1373,6 +1382,14 @@ FleetUpdateHandle& FleetUpdateHandle::consider_cleaning_requests(
 }
 
 //==============================================================================
+FleetUpdateHandle& FleetUpdateHandle::consider_bookshelf_requests(
+  ConsiderRequest consider)
+{
+  *_pimpl->deserialization.consider_bookshelf = std::move(consider);
+  return *this;
+}
+
+//==============================================================================
 FleetUpdateHandle& FleetUpdateHandle::consider_patrol_requests(
   ConsiderRequest consider)
 {
@@ -1635,8 +1652,22 @@ FleetUpdateHandle& FleetUpdateHandle::accept_task_requests(
     });
 
   return *this;
-}
 
+  consider_bookshelf_requests(
+    [legacy_converter](const nlohmann::json& msg, Confirmation& confirm)
+    {
+      rmf_task_msgs::msg::TaskProfile profile;
+
+      profile.description.task_type.type =
+      rmf_task_msgs::msg::TaskType::TYPE_BOOKSHELF;
+
+      profile.description.bookshelf.start_waypoint = msg["book_zone"].get<std::string>();
+
+      legacy_converter(profile, confirm);
+    });
+
+  return *this;
+}
 //==============================================================================
 FleetUpdateHandle& FleetUpdateHandle::accept_delivery_requests(
   AcceptDeliveryRequest check)
